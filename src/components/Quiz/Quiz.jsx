@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classes from './quiz.module.scss';
 import ActiveQuiz from '../ActiveQuiz/ActiveQuiz'
 import FinishedQuiz from '../FinishedQuiz/FinishedQuiz'
+import PropTypes from 'prop-types';
 
 export default class Quiz extends Component {
 
@@ -153,4 +154,16 @@ export default class Quiz extends Component {
             </div>
         )
     }
+}
+
+FinishedQuiz.propTypes = {
+    quiz: PropTypes.array,
+    retryHandle: PropTypes.func,
+}
+
+ActiveQuiz.propTypes = {
+    selectedAnswerHander: PropTypes.func,
+    answers: PropTypes.array,
+    questionsList: PropTypes.number,
+    question: PropTypes.string,
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import ButtonTemplate from '../Elements/buttonTemplate';
 import classes from './finishedQuiz.module.scss';
+import PropTypes from 'prop-types';
 
 const FinishedQuiz = props => {
 
@@ -47,3 +48,8 @@ const FinishedQuiz = props => {
 }
 
 export default FinishedQuiz;
+
+ButtonTemplate.propTypes = {
+    retryHandle: PropTypes.func,
+    buttonText: PropTypes.string,
+}
