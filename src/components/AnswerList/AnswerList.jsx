@@ -2,7 +2,6 @@ import React from 'react';
 import classes from './answerList.module.scss';
 import AnswerItem from "./AnswerItem/AnswerItem";
 import PropTypes from 'prop-types';
-import ButtonTemplate from "../Elements/buttonTemplate";
 
 const AnswerList = props => (
     <ul className={classes.answerList}>
