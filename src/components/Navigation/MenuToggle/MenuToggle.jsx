@@ -11,7 +11,6 @@ const MenuToggle = props => {
     if (props.isOpen) {
         classIcon.push('fa-times')
         classIcon.push(classes['menuToggle_open'])
-
     } else {
         classIcon.push('fa-bars')
     }
