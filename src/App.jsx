@@ -1,11 +1,16 @@
+import React, {Component} from "react";
+import Layout from "./components/Layout/Layout";
+import Quiz from "./components/Quiz/Quiz";
 import './assets/scss/style.scss';
 
-function App() {
-  return (
-    <div className="App">
-      App react
-    </div>
-  );
+export default class App extends Component {
+  render() {
+
+      return (
+          <Layout>
+              <Quiz />
+          </Layout>
+      );
+  }
 }
 
-export default App;
