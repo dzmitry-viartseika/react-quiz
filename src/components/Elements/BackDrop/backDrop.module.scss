@@ -1,0 +1,11 @@
+@import "../../../assets/scss/variables";
+
+.backDrop {
+  z-index: 9;
+  background: rgba($color-black, .7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
