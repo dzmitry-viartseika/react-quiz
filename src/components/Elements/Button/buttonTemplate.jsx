@@ -12,8 +12,15 @@ const ButtonTemplate = props => {
             btnClasses.push('app-button_success')
         }
 
+        if (props.isFormValid) {
+            btnClasses.push('app-button_disable')
+        }
+
     return (
-        <button className={btnClasses.join(' ')} onClick={props.retryHandle}>
+        <button
+            className={btnClasses.join(' ')}
+            onClick={props.buttonHandler}
+        >
             { props.buttonText }
         </button>
     )

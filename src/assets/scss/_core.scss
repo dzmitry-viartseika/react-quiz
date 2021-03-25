@@ -6,9 +6,48 @@ body {
 
 .app {
 
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
   &__title {
     font: 40px $font-global-bold;
     color: $color-white;
+
+    &_center {
+      text-align: center;
+    }
+
+    &_margin {
+      margin-bottom: 5px;
+    }
+  }
+
+  &-field {
+    margin-bottom: 15px;
+
+    &__error {
+      color: $error;
+      font-size: 10px;
+    }
+
+    &__label {
+      font-weight: bold;
+      font-size: 10px;
+    }
+
+    &__input {
+      border: 1px solid $hoverEffect;
+      border-radius: $borderRadius;
+      width: 100%;
+      height: 40px;
+      padding: 12px;
+      font: $font-size-base $font-global;
+      line-height: 1.42 ;
+      transition: border-color .15s ease-in;
+    }
   }
 
   &-layout {

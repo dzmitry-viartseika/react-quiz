@@ -21,7 +21,7 @@ export default class QuizList extends Component {
         return (
             <div className={classes.quizList}>
                 <h1 className="app__title">Список тестов</h1>
-                <ul className={classes['quizList__list']}>
+                <ul className="app__list">
                     { this.renderMethod() }
                 </ul>
             </div>

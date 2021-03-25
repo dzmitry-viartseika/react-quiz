@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import BackDrop from "../../Elements/BackDrop/BackDrop";
 import navList from '../../../constants/Navigation/NavList';
 import classes from './drawer.module.scss';
-import {NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default class Drawer extends Component {
 
