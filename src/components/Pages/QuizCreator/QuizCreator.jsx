@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import ButtonTemplate from "../../Elements/Button/buttonTemplate";
 import InputTemplate from "../../Elements/Input/InputTemplate";
 import SelectTemplate from "../../Elements/Select/SelectTemplate";
-import { createControl } from '../../../utils/formValues/formValues'
+import { createControl, validate, validateForm } from '../../../utils/formValues/formValues'
 import classes from './quizCreater.module.scss';
 
 function createOptionControl(number,) {
@@ -15,7 +15,7 @@ function createOptionControl(number,) {
 
 function createFormControls() {
     return {
-        questions: createControl({
+        question: createControl({
             label: 'Введите вопрос',
             errorMessage: 'Вопрос не может быть пустым'
         }, {required: true}),
@@ -38,27 +38,63 @@ export default class QuizCreator extends Component {
         event.preventDefault()
     }
 
-    addQuestionHandler = () => {
-        console.log('addQuestionHandler')
+    addQuestionHandler = event => {
+        event.preventDefault();
+        const quiz = this.state.quiz.concat();
+        console.log('quiz', quiz)
+        const index = quiz.length + 1;
+        const { question, option1, option2, option3, option4 } = this.state.formControls;
+        const questionItem = {
+            question: question.value,
+            id: index,
+            rightAnswerId: this.state.rightAnswerId,
+            answers: [
+                {
+                    text: option1.value,
+                    id: option1.id
+                },
+                {
+                    text: option2.value,
+                    id: option2.id
+                },
+                {
+                    text: option3.value,
+                    id: option3.id
+                },
+                {
+                    text: option4.value,
+                    id: option4.id
+                },
+            ]
+        }
+        quiz.push(questionItem);
+        this.setState({
+            quiz,
+            isFormValid: false,
+            rightAnswerId: 1,
+            formControls: createFormControls()
+        })
     }
 
-    createQuizHandler = () => {
-        console.log('createQuizHandler')
+    createQuizHandler = event => {
+        event.preventDefault();
+        console.log(this.state.quiz)
     }
 
     onChangeHandler = (event, controlName) => {
         const formControls = { ...this.state.formControls }
         const control = { ...formControls[controlName] }
 
-        control.value = event.target.value
-        control.touched = true
-        control.valid = this.validateControl(control.value, control.validation)
+        control.value = event.target.value;
+        control.touched = true;
+        control.valid = validate(control.value, control.validation);
 
 
         formControls[controlName] = control
 
         this.setState({
             formControls,
+            isFormValid: validateForm(formControls)
         })
     }
 
@@ -71,7 +107,6 @@ export default class QuizCreator extends Component {
     render() {
 
         const inputs = this.state.formControls;
-        const { rightAnswerId } = this.state;
 
         return (
             <div className={classes.quizCreator}>
@@ -85,9 +120,9 @@ export default class QuizCreator extends Component {
                             Object.keys(inputs).map((controlName, index) => {
                                 const input = this.state.formControls[controlName]
                                 return (
-                                    <React.Fragment>
+                                    <React.Fragment
+                                        key={index}>
                                         <InputTemplate
-                                            key={index}
                                             label={input.label}
                                             type={input.type}
                                             value={input.value}
@@ -104,7 +139,7 @@ export default class QuizCreator extends Component {
                         }
                         <SelectTemplate
                             label="Выберите правильный ответ"
-                            value={rightAnswerId}
+                            value={this.state.rightAnswerId}
                             onChange={this.selectChangeHandler}
                             options={[
                                 {
