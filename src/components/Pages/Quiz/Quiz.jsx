@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import classes from './quiz.module.scss';
 import ActiveQuiz from '../../ActiveQuiz/ActiveQuiz'
 import FinishedQuiz from '../../FinishedQuiz/FinishedQuiz'
+import Loader from "../../Elements/Loader/Loader";
 import PropTypes from 'prop-types';
+import quizApi from '../../../api/quizApi/api';
 import classNames from "classnames";
 
 export default class Quiz extends Component {
 
     state = {
         activeQuiz: 0,
+        isLoader: false,
         results: {},
         isFinished: true,
         answerState: null,
@@ -75,8 +78,25 @@ export default class Quiz extends Component {
         })
     }
 
-    componentDidMount() {
-        console.log('quizId', this.props.match.params.id)
+    async componentDidMount() {
+        const quizId = this.props.match.params.id;
+        try {
+            this.setState({
+                isLoader: true
+            })
+            const { data } = await quizApi.getQuizById(quizId);
+            const quiz = data;
+
+            this.setState({
+                isLoader: false,
+                quiz,
+            })
+        } catch (err) {
+            this.setState({
+                isLoader: false
+            })
+            console.error(err);
+        }
     }
 
     selectedAnswerHander = answerId => {
@@ -134,31 +154,37 @@ export default class Quiz extends Component {
         const isFinished = this.state.isFinished;
         const results = this.state.results;
         const quiz = this.state.quiz;
+        const isLoader = this.state.isLoader;
 
         const itemClass = classNames(classes['quiz__title'], 'app__title');
 
         return (
-            <div className={classes.quiz}>
-                <div className={classes['quiz__wrapper']}>
-                    <h1 className={itemClass}>Ответьте на все вопросы</h1>
-                    {
-                        isFinished
-                            ? <FinishedQuiz
-                                results={results}
-                                quiz={quiz}
-                                retryHandle={this.retryHandle}
-                            />
-                            : <ActiveQuiz
-                                answers={answers}
-                                question={question}
-                                questionsList={questionsList}
-                                activeQuiz={activeQuiz}
-                                state={state}
-                                selectedAnswerHander={this.selectedAnswerHander}
+            <>
+                {
+                    isLoader ? <Loader /> : null
+                }
+                <div className={classes.quiz}>
+                    <div className={classes['quiz__wrapper']}>
+                        <h1 className={itemClass}>Ответьте на все вопросы</h1>
+                        {
+                            isFinished
+                                ? <FinishedQuiz
+                                    results={results}
+                                    quiz={quiz}
+                                    retryHandle={this.retryHandle}
                                 />
-                    }
+                                : <ActiveQuiz
+                                    answers={answers}
+                                    question={question}
+                                    questionsList={questionsList}
+                                    activeQuiz={activeQuiz}
+                                    state={state}
+                                    selectedAnswerHander={this.selectedAnswerHander}
+                                />
+                        }
+                    </div>
                 </div>
-            </div>
+            </>
         )
     }
 }

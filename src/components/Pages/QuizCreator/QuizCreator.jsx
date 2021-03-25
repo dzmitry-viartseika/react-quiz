@@ -2,7 +2,9 @@ import React, {Component} from 'react'
 import ButtonTemplate from "../../Elements/Button/buttonTemplate";
 import InputTemplate from "../../Elements/Input/InputTemplate";
 import SelectTemplate from "../../Elements/Select/SelectTemplate";
-import { createControl, validate, validateForm } from '../../../utils/formValues/formValues'
+import Loader from "../../Elements/Loader/Loader";
+import { createControl, validate, validateForm } from '../../../utils/formValues/formValues';
+import quizApi from '../../../api/quizApi/api';
 import classes from './quizCreater.module.scss';
 
 function createOptionControl(number,) {
@@ -30,6 +32,7 @@ export default class QuizCreator extends Component {
 
     state = {
         quiz: [],
+        isLoader: false,
         rightAnswerId: 1,
         formControls: createFormControls()
     }
@@ -41,7 +44,6 @@ export default class QuizCreator extends Component {
     addQuestionHandler = event => {
         event.preventDefault();
         const quiz = this.state.quiz.concat();
-        console.log('quiz', quiz)
         const index = quiz.length + 1;
         const { question, option1, option2, option3, option4 } = this.state.formControls;
         const questionItem = {
@@ -76,9 +78,23 @@ export default class QuizCreator extends Component {
         })
     }
 
-    createQuizHandler = event => {
+    createQuizHandler = async (event) => {
         event.preventDefault();
-        console.log(this.state.quiz)
+        const { quiz } = this.state;
+        try {
+            this.setState({
+                isLoader: true
+            })
+            await quizApi.createQuiz(quiz);
+            this.setState({
+                isLoader: false
+            })
+        } catch (err) {
+            this.setState({
+                isLoader: false
+            })
+            console.error(err);
+        }
     }
 
     onChangeHandler = (event, controlName) => {
@@ -107,9 +123,13 @@ export default class QuizCreator extends Component {
     render() {
 
         const inputs = this.state.formControls;
+        const isLoader = this.state.isLoader;
 
         return (
             <div className={classes.quizCreator}>
+                {
+                    isLoader ? <Loader /> : null
+                }
                 <div className={classes['quizCreator__wrapper']}>
                     <h1 className="app__title">Создание теста</h1>
                     <form
