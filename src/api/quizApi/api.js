@@ -1,4 +1,4 @@
-import CURRENT_SERVER from '../domain';
+import { CURRENT_SERVER } from '../domain';
 const axios = require('axios');
 
 export default {
