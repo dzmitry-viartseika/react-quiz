@@ -6,6 +6,11 @@ body {
 
 .app {
 
+  &__title {
+    font: 40px $font-global-bold;
+    color: $color-white;
+  }
+
   &-layout {
     min-height: 100vh;
     display: flex;
@@ -35,4 +40,7 @@ body {
   color: $error;
 }
 
+.active {
+  color: $activeLink;
+}
 

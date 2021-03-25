@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import classes from './quiz.module.scss';
-import ActiveQuiz from '../ActiveQuiz/ActiveQuiz'
-import FinishedQuiz from '../FinishedQuiz/FinishedQuiz'
+import ActiveQuiz from '../../ActiveQuiz/ActiveQuiz'
+import FinishedQuiz from '../../FinishedQuiz/FinishedQuiz'
 import PropTypes from 'prop-types';
+import classNames from "classnames";
 
 export default class Quiz extends Component {
 
@@ -74,6 +75,10 @@ export default class Quiz extends Component {
         })
     }
 
+    componentDidMount() {
+        console.log('quizId', this.props.match.params.id)
+    }
+
     selectedAnswerHander = answerId => {
         const question = this.state.quiz[this.state.activeQuiz];
         const results = this.state.results;
@@ -130,10 +135,12 @@ export default class Quiz extends Component {
         const results = this.state.results;
         const quiz = this.state.quiz;
 
+        const itemClass = classNames(classes['quiz__title'], 'app__title');
+
         return (
             <div className={classes.quiz}>
                 <div className={classes['quiz__wrapper']}>
-                    <h1 className={classes['quiz__title']}>Ответьте на все вопросы</h1>
+                    <h1 className={itemClass}>Ответьте на все вопросы</h1>
                     {
                         isFinished
                             ? <FinishedQuiz

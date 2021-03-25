@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import BackDrop from "../../Elements/BackDrop/BackDrop";
+import navList from '../../../constants/Navigation/NavList';
 import classes from './drawer.module.scss';
-
-const links = [
-    1,2,3
-]
+import {NavLink} from "react-router-dom";
 
 export default class Drawer extends Component {
+
+    clickHandler = () => {
+        this.props.onCloseHandler()
+    }
 
     render() {
 
@@ -16,21 +18,24 @@ export default class Drawer extends Component {
             drawerClasses.push(classes['drawer_close'])
         }
 
-
-
         return (
             <>
                 <nav className={drawerClasses.join(' ')}>
                     <ul className={classes['drawer__list']}>
                         {
-                            links.map((link, index) => {
+                            navList.map((link, index) => {
                                 return (
                                     <li key={index}
                                         className={classes['drawer__item']}
                                     >
-                                        <div>
-                                            Link: { link }
-                                        </div>
+                                        <NavLink
+                                            className={classes['drawer__link']}
+                                            exact={link.exact}
+                                            to={link.route}
+                                            onClick={this.clickHandler}
+                                        >
+                                             { link.text }
+                                        </NavLink>
                                     </li>
                                 )
                             })

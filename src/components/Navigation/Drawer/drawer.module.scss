@@ -25,5 +25,17 @@
 
   &__item {
     margin-bottom: 15px;
+    text-align: left;
+    padding: 5px;
+    text-transform: uppercase;
+    transition: opacity .15s ease-in;
+
+    &:hover {
+      opacity: .7;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
   }
 }
