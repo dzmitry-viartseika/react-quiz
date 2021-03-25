@@ -10,7 +10,7 @@ export default class Quiz extends Component {
     state = {
         activeQuiz: 0,
         results: {},
-        isFinished: false,
+        isFinished: true,
         answerState: null,
         quiz: [
             {

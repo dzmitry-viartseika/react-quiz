@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ButtonTemplate from '../Elements/buttonTemplate';
 import classes from './finishedQuiz.module.scss';
 import PropTypes from 'prop-types';
@@ -41,7 +42,15 @@ const FinishedQuiz = props => {
                 <ButtonTemplate
                     retryHandle={props.retryHandle}
                     buttonText="Повторить"
+                    typeButton={'primary'}
                 />
+                <Link to={'/'}>
+                    <ButtonTemplate
+                        retryHandle={props.retryHandle}
+                        typeButton={'success'}
+                        buttonText="Перейти в список тестов"
+                    />
+                </Link>
             </div>
         </div>
     )

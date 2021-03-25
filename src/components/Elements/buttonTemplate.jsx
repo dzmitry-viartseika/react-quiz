@@ -2,8 +2,18 @@ import React from 'react';
 
 const ButtonTemplate = props => {
 
+    const btnClasses = [
+        'app-button'
+    ]
+
+        if (props.typeButton === 'primary') {
+            btnClasses.push('app-button_primary')
+        } else {
+            btnClasses.push('app-button_success')
+        }
+
     return (
-        <button className="app-button" onClick={props.retryHandle}>
+        <button className={btnClasses.join(' ')} onClick={props.retryHandle}>
             { props.buttonText }
         </button>
     )

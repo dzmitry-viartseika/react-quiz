@@ -11,4 +11,12 @@
   &:hover {
     opacity: .8;
   }
+
+  &_primary {
+    background: $primary;
+  }
+
+  &_success {
+    background: $success;
+  }
 }

@@ -19,4 +19,8 @@
   &__action {
     margin-top: 20px;
   }
+
+  button + a {
+    margin-left: 20px;
+  }
 }
