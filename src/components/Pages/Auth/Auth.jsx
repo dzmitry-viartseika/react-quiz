@@ -70,16 +70,18 @@ export default class Auth extends Component {
         control.touched = true
         control.valid = this.validateControl(control.value, control.validation)
 
+        // let isFormValid = true;
+        //
+        // Object.keys(formControls).forEach((name) => {
+        //     console.log('formControls[name].valid', formControls[name].valid)
+        //     isFormValid = formControls[name].valid && isFormValid
+        // })
+
         formControls[controlName] = control
 
-        let isFormValid = true;
-
-        Object.keys(formControls).forEach((name) => {
-            isFormValid = formControls[name].valid && isFormValid
-        })
-
         this.setState({
-            formControls: isFormValid
+            formControls,
+            // formControls: isFormValid
         })
     }
 
@@ -126,13 +128,11 @@ export default class Auth extends Component {
                             buttonHandler={this.userLogin}
                             typeButton={'primary'}
                             buttonText="Войти"
-                            disabled={isFormValid}
                         />
                         <ButtonTemplate
                             buttonHandler={this.signUp}
                             typeButton={'primary'}
                             buttonText="Зарегестрироваться"
-                            disabled={isFormValid}
                         />
                     </div>
                 </form>

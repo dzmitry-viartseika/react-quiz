@@ -18,7 +18,6 @@ const InputTemplate = props => {
     return (
         <div className="app-field">
             <label className="app-field__label" htmlFor={htmlFor}>{ props.label }</label>
-            <p>{ props.value }</p>
             <input
                 type={inputType}
                 className="app-field__input"
