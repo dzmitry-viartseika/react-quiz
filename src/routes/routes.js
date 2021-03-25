@@ -15,9 +15,9 @@ const routes = {
         exact: false,
     },
     create: {
-        url: '/quiz-create',
+        url: '/quiz-creator',
         component: QuizCreator,
-        exact: false,
+        exact: true,
     },
     home: {
         url: '/',

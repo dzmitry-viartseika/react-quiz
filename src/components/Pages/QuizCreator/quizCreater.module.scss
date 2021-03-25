@@ -1,0 +1,24 @@
+@import "../../../assets/scss/variables";
+
+.quizCreator {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+  flex-grow: 1;
+  background: linear-gradient(270deg, $color-creator-gradient-start 0%, $color-creator-gradient-end 100%);
+
+  &__form {
+    width: 100%;
+    max-width: 600px;
+    padding: 0 20px;
+  }
+
+  &__action {
+    display: flex;
+    justify-content: center;
+  }
+
+  button + button {
+    margin-left: 15px;
+  }
+}
