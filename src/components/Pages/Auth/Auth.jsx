@@ -40,7 +40,6 @@ export default class Auth extends Component {
     }
 
     userLogin = async () => {
-        console.log('userLogin');
         const user = {
             email: this.state.formControls.email.value,
             password: this.state.formControls.password.value,

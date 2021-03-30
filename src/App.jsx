@@ -7,8 +7,6 @@ import './assets/scss/style.scss';
 export default class App extends Component {
   render() {
 
-      console.log('routes', routes)
-
       return (
           <Layout>
               <Switch>
