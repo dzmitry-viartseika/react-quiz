@@ -6,13 +6,19 @@ import { BrowserRouter} from 'react-router-dom';
 import {createStore, compose, applyMiddleware} from 'redux';
 import { rootReducer } from "./redux/rootReducer";
 import { Provider } from "react-redux";
+import reduxThunk from 'redux-thunk';
+
+const loggerMiddleWare = store => next => action => {
+    const result = next(action)
+    return result;
+}
 
 const store = createStore(
     rootReducer,
-    compose(
-        applyMiddleware(),
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    )
+    applyMiddleware(
+        loggerMiddleWare,
+        reduxThunk
+    ),
 );
 
 ReactDOM.render(
