@@ -7,13 +7,10 @@ import { fetchQuizes } from '../../../redux/actions/actions'
 
 class QuizList extends Component {
 
-
-
     componentDidMount() {
         console.log('props', this.props)
         this.props.fetchQuizes()
     }
-
 
     render() {
         return (
@@ -42,6 +39,7 @@ class QuizList extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log('state', state)
     return {
         quizList: state.quiz.quizList,
         loading: state.quiz.isLoader

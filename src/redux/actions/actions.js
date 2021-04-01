@@ -1,4 +1,4 @@
-import { HIDE_LOADER, SHOW_LOADER, FETCH_QUIZES} from "../../constants/mutationsTypes/mutations-types";
+import { HIDE_LOADER, SHOW_LOADER, FETCH_QUIZES, FETCH_QUIZ} from "../../constants/mutationsTypes/mutations-types";
 import quizApi from '../../api/quizApi/api';
 
 export function showLoader() {
@@ -7,13 +7,33 @@ export function showLoader() {
     }
 }
 
+export function fetchQuizById(quizId) {
+    console.log('quizId', quizId)
+    return async dispatch => {
+        dispatch(showLoader())
+        try {
+            const { data } = await quizApi.getQuizById(quizId);
+            dispatch(fetchedQuiz(data))
+            dispatch(hideLoader())
+        } catch (err) {
+            dispatch(hideLoader())
+            console.error(err);
+        }
+    }
+}
+
+export default function fetchedQuiz(quiz) {
+    return {
+        type: FETCH_QUIZ,
+        payload: quiz,
+    }
+}
+
 export function fetchQuizes() {
     return async dispatch => {
         dispatch(showLoader())
         try {
-            console.log('111')
             const { data } = await quizApi.getQuizList();
-            console.log('data', data)
             const quizList = []
             Object.keys(data).forEach((item, index) => {
                 quizList.push({

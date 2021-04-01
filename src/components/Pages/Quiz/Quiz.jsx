@@ -4,69 +4,20 @@ import ActiveQuiz from '../../ActiveQuiz/ActiveQuiz'
 import FinishedQuiz from '../../FinishedQuiz/FinishedQuiz'
 import Loader from "../../Elements/Loader/Loader";
 import PropTypes from 'prop-types';
-import quizApi from '../../../api/quizApi/api';
 import classNames from "classnames";
+import { fetchQuizById } from "../../../redux/actions/actions";
+import { connect } from "react-redux";
 
-export default class Quiz extends Component {
+class Quiz extends Component {
 
-    state = {
-        activeQuiz: 0,
-        isLoader: false,
-        results: {},
-        isFinished: true,
-        answerState: null,
-        quiz: [
-            {
-                id: 1,
-                question: 'Какого цвета небо?',
-                rightAnswerId: 2,
-                answers: [
-                    {
-                        id: 1,
-                        text: 'Черный',
-                    },
-                    {
-                        id: 2,
-                        text: 'Синий',
-                    },
-                    {
-                        id: 3,
-                        text: 'Красный',
-                    },
-                    {
-                        id: 4,
-                        text: 'Зеленый',
-                    },
-                ]
-            },
-            {
-                id: 2,
-                question: 'В каком году основали Санкт-Петербург?',
-                rightAnswerId: 4,
-                answers: [
-                    {
-                        id: 1,
-                        text: '1700',
-                    },
-                    {
-                        id: 2,
-                        text: '1701',
-                    },
-                    {
-                        id: 3,
-                        text: '1702',
-                    },
-                    {
-                        id: 4,
-                        text: '1073',
-                    },
-                ]
-            }
-        ]
+    componentDidMount() {
+        const quizId = this.props.match.params.id
+        console.log('quizId', quizId)
+        this.props.fetchQuizById(quizId)
     }
 
     isQuizMethod() {
-        return this.state.activeQuiz + 1 === this.state.quiz.length;
+        return this.props.activeQuiz + 1 === this.props.quiz.length;
     }
 
     retryHandle = () => {
@@ -78,34 +29,13 @@ export default class Quiz extends Component {
         })
     }
 
-    async componentDidMount() {
-        const quizId = this.props.match.params.id;
-        try {
-            this.setState({
-                isLoader: true
-            })
-            const { data } = await quizApi.getQuizById(quizId);
-            const quiz = data;
-
-            this.setState({
-                isLoader: false,
-                quiz,
-            })
-        } catch (err) {
-            this.setState({
-                isLoader: false
-            })
-            console.error(err);
-        }
-    }
-
     selectedAnswerHander = answerId => {
-        const question = this.state.quiz[this.state.activeQuiz];
-        const results = this.state.results;
+        const question = this.props.quiz[this.props.activeQuiz];
+        const results = this.props.results;
 
-        if (this.state.answerState) {
-            const key = Object.keys(this.state.answerState)[0];
-            if (this.state.answerState[key] === 'success') {
+        if (this.props.answerState) {
+            const key = Object.keys(this.props.answerState)[0];
+            if (this.props.answerState[key] === 'success') {
                 return
             }
         }
@@ -146,48 +76,59 @@ export default class Quiz extends Component {
 
     render() {
 
-        const answers = this.state.quiz[this.state.activeQuiz].answers;
-        const question = this.state.quiz[this.state.activeQuiz].question;
-        const questionsList = this.state.quiz.length;
-        const activeQuiz = this.state.activeQuiz;
-        const state = this.state.answerState;
-        const isFinished = this.state.isFinished;
-        const results = this.state.results;
-        const quiz = this.state.quiz;
-        const isLoader = this.state.isLoader;
-
         const itemClass = classNames(classes['quiz__title'], 'app__title');
 
         return (
             <>
                 {
-                    isLoader ? <Loader /> : null
+                    this.props.isLoader || !this.props.quizItem
+                        ? <Loader/>
+                        : <div className={classes.quiz}>
+                            <div className={classes['quiz__wrapper']}>
+                                <h1 className={itemClass}>Ответьте на все вопросы</h1>
+                                {
+                                    this.props.isFinished
+                                        ? <FinishedQuiz
+                                            results={this.props.results}
+                                            quiz={this.props.quizItem}
+                                            retryHandle={this.retryHandle}
+                                        />
+                                        : <ActiveQuiz
+                                            answers={this.props.answers}
+                                            question={this.props.question}
+                                            questionsList={this.props.questionsList}
+                                            activeQuiz={this.props.activeQuiz}
+                                            state={this.props.answerState}
+                                            selectedAnswerHander={this.selectedAnswerHander}
+                                        />
+                                }
+                            </div>
+                        </div>
                 }
-                <div className={classes.quiz}>
-                    <div className={classes['quiz__wrapper']}>
-                        <h1 className={itemClass}>Ответьте на все вопросы</h1>
-                        {
-                            isFinished
-                                ? <FinishedQuiz
-                                    results={results}
-                                    quiz={quiz}
-                                    retryHandle={this.retryHandle}
-                                />
-                                : <ActiveQuiz
-                                    answers={answers}
-                                    question={question}
-                                    questionsList={questionsList}
-                                    activeQuiz={activeQuiz}
-                                    state={state}
-                                    selectedAnswerHander={this.selectedAnswerHander}
-                                />
-                        }
-                    </div>
-                </div>
             </>
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        quizList: state.quiz.quizList,
+        loading: state.quiz.isLoader,
+        activeQuiz: state.quiz.activeQuiz,
+        results: state.quiz.results,
+        isFinished: state.quiz.isFinished,
+        answerState: state.quiz.answerState,
+        quizItem: state.quiz.quizItem
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        fetchQuizById: id => dispatch(fetchQuizById(id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Quiz)
 
 FinishedQuiz.propTypes = {
     quiz: PropTypes.array,

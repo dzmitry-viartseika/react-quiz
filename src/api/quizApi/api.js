@@ -15,6 +15,7 @@ export default {
     return instCred.get('quizes.json');
   },
   getQuizById(id) {
+    console.log('id', id)
     const instCred = axios.create({
       baseURL: CURRENT_SERVER,
     });
