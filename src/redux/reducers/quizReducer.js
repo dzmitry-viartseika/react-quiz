@@ -1,11 +1,20 @@
-import { FETCH_QUIZES, HIDE_LOADER, SHOW_LOADER, FETCH_QUIZ } from "../../constants/mutationsTypes/mutations-types";
+import {
+    FETCH_QUIZES,
+    HIDE_LOADER,
+    SHOW_LOADER,
+    FETCH_QUIZ,
+    QUIZ_SET_STATE,
+    QUIZ_NEXT_QUESTION,
+    QUIZ_RETRY,
+    FINISH_QUIZ
+} from "../../constants/mutationsTypes/mutations-types";
 
 const initialState = {
     isLoader: false,
     quizList: [],
     activeQuiz: 0,
     results: {},
-    isFinished: true,
+    isFinished: false,
     answerState: null,
     quizItem: null
 };
@@ -16,7 +25,7 @@ function quizReducer(state = initialState, action) {
         case FETCH_QUIZES:
             return {
                 ...state,
-                quizList: action.payload
+                quizItem: action.payload
             }
         case SHOW_LOADER:
             return {
@@ -28,10 +37,34 @@ function quizReducer(state = initialState, action) {
                 ...state,
                 isLoader: false
             }
+        case FINISH_QUIZ:
+            return {
+                ...state,
+                isFinished: true
+            }
         case FETCH_QUIZ:
             return {
                 ...state,
-                quizItem: action.payload
+                quizItem: action.quiz
+            }
+        case  QUIZ_SET_STATE:
+            return {
+                ...state,
+                answerState: action.answerState,
+                results: action.results
+            }
+        case  QUIZ_NEXT_QUESTION:
+            return {
+                ...state,
+                activeQuiz: action.number
+            }
+        case QUIZ_RETRY:
+            return  {
+                ...state,
+                activeQuiz: 0,
+                answerState: null,
+                isFinished: false,
+                results: {}
             }
         default:
             return state

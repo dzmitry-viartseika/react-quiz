@@ -1,4 +1,13 @@
-import { HIDE_LOADER, SHOW_LOADER, FETCH_QUIZES, FETCH_QUIZ} from "../../constants/mutationsTypes/mutations-types";
+import {
+    HIDE_LOADER,
+    SHOW_LOADER,
+    FETCH_QUIZES,
+    FETCH_QUIZ,
+    QUIZ_SET_STATE,
+    FINISH_QUIZ,
+    QUIZ_RETRY,
+    QUIZ_NEXT_QUESTION
+} from "../../constants/mutationsTypes/mutations-types";
 import quizApi from '../../api/quizApi/api';
 
 export function showLoader() {
@@ -8,7 +17,6 @@ export function showLoader() {
 }
 
 export function fetchQuizById(quizId) {
-    console.log('quizId', quizId)
     return async dispatch => {
         dispatch(showLoader())
         try {
@@ -22,10 +30,74 @@ export function fetchQuizById(quizId) {
     }
 }
 
+export function quizSetState(answerState, results) {
+    return {
+        type: QUIZ_SET_STATE,
+        answerState, results
+    }
+}
+
+export function finishQuiz() {
+    return {
+        type: FINISH_QUIZ
+    }
+}
+
+export function quizNextQuestion(number) {
+    return {
+        type: QUIZ_NEXT_QUESTION,
+        number
+    }
+}
+
+export function quizAnswerClick(answerId) {
+    return (dispatch, getState) => {
+        const state = getState().quiz
+        const question = state.quiz[state.activeQuiz];
+        const results = state.results;
+
+        if (state.answerState) {
+            const key = Object.keys(state.answerState)[0];
+            if (state.answerState[key] === 'success') {
+                return
+            }
+        }
+
+        if (question.rightAnswerId === answerId) {
+            if (!results[answerId]) {
+                results[answerId] = 'success';
+            }
+            dispatch(quizSetState({[answerId]: 'success'}, results))
+            const timeOut = window.setTimeout(() => {
+                if (isQuizMethod()) {
+                    dispatch(finishQuiz())
+                } else {
+
+                    dispatch(quizNextQuestion(state.activeQuiz + 1))
+                }
+                window.clearTimeout(timeOut)
+            }, 1000)
+        } else {
+            results[answerId] = 'error'
+            dispatch(quizSetState({[answerId]: 'error'}, results))
+        }
+    }
+}
+
 export default function fetchedQuiz(quiz) {
     return {
         type: FETCH_QUIZ,
         payload: quiz,
+    }
+}
+
+function isQuizMethod(state) {
+    return state.activeQuiz + 1 === state.quiz.length;
+}
+
+export function retryHandle() {
+    return {
+        type: QUIZ_RETRY
     }
 }
 
