@@ -25,7 +25,7 @@ function quizReducer(state = initialState, action) {
         case FETCH_QUIZES:
             return {
                 ...state,
-                quizItem: action.payload
+                quizList: action.payload
             }
         case SHOW_LOADER:
             return {
@@ -45,7 +45,7 @@ function quizReducer(state = initialState, action) {
         case FETCH_QUIZ:
             return {
                 ...state,
-                quizItem: action.quiz
+                quizItem: action.payload
             }
         case  QUIZ_SET_STATE:
             return {

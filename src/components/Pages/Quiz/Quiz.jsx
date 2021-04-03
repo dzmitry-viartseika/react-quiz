@@ -11,15 +11,17 @@ import { connect } from "react-redux";
 class Quiz extends Component {
 
     componentDidMount() {
-        const quizId = this.props.match.params.id
+        const quizId = this.props.match.params.id;
+        console.log('quizId', quizId)
         this.props.fetchQuizById(quizId)
     }
 
     render() {
         const itemClass = classNames(classes['quiz__title'], 'app__title');
-        const answers = this.props.quiz[this.props.activeQuiz].answers;
-        const question = this.props.quiz[this.props.activeQuiz].question;
-        const questionsList = this.props.quiz.length;
+        console.log('this.props.quizItem', this.props.quizItem)
+        const answers = this.props.quizItem[this.props.activeQuiz].answers;
+        const question = this.props.quizItem[this.props.activeQuiz].question;
+        const questionsList = this.props.quizList.length;
 
         return (
             <>
